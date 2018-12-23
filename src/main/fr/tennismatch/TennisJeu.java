@@ -2,17 +2,13 @@ package fr.tennismatch;
 
 public class TennisJeu {
 
-    private Player winner;
+    private Player winnerTennisJeu;
 
-    public TennisJeu(Player winner) {
-        this.winner = winner;
+    public TennisJeu(Player winnerTennisJeu) {
+        this.winnerTennisJeu = winnerTennisJeu;
     }
 
-    public Player getWinner() {
-        return winner;
-    }
-
-    public void setWinner(Player winner) {
-        this.winner = winner;
+    public Player getWinnerTennisJeu() {
+        return winnerTennisJeu;
     }
 }

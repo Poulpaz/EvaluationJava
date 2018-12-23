@@ -2,8 +2,6 @@ package fr.tennismatch;
 
 import org.junit.Test;
 
-import java.util.List;
-
 import static org.junit.Assert.*;
 
 public class TennisMatchTest {
@@ -13,7 +11,7 @@ public class TennisMatchTest {
         Player player1 = new Player("Tristan");
         player1.setScore(4);
         Player player2 = new Player("Jerome");
-        TennisMatch tennisMatch = new TennisMatch(MatchType.BEST_OF_FIVE, player1, player2, false);
+        TennisMatch tennisMatch = new TennisMatch(MatchType.BEST_OF_FIVE, player1, player2, true);
         assertEquals(tennisMatch.pointsForPlayer(player1), "A");
     }
 
@@ -22,7 +20,7 @@ public class TennisMatchTest {
         Player player1 = new Player("Tristan");
         player1.setScore(1);
         Player player2 = new Player("Jerome");
-        TennisMatch tennisMatch = new TennisMatch(MatchType.BEST_OF_FIVE, player1, player2, false);
+        TennisMatch tennisMatch = new TennisMatch(MatchType.BEST_OF_FIVE, player1, player2, true);
         tennisMatch.updateWithPointWonBy(player2);
         assertEquals(player2.getScore(), 1);
     }
@@ -33,8 +31,18 @@ public class TennisMatchTest {
         player1.setScore(4);
         Player player2 = new Player("Jerome");
         player2.setScore(3);
-        TennisMatch tennisMatch = new TennisMatch(MatchType.BEST_OF_FIVE, player1, player2, false);
+        TennisMatch tennisMatch = new TennisMatch(MatchType.BEST_OF_FIVE, player1, player2, true);
         tennisMatch.updateWithPointWonBy(player1);
-        assertEquals(tennisMatch.getTennisJeux().get(0).getWinner(), player1);
+        assertEquals(tennisMatch.getTennisSetList().get(tennisMatch.getCurrentSetNumber() - 1).getTennisJeuList().get(0).getWinnerTennisJeu(), player1);
+    }
+
+    @Test
+    public void gamesInCurrentSetForPlayer() {
+        Player player1 = new Player("Tristan");
+        Player player2 = new Player("Jerome");
+        TennisMatch tennisMatch = new TennisMatch(MatchType.BEST_OF_FIVE, player1, player2, true);
+        tennisMatch.getTennisSetList().get(tennisMatch.getCurrentSetNumber() - 1).setWinnerTennisJeu(player1);
+        tennisMatch.getTennisSetList().get(tennisMatch.getCurrentSetNumber() - 1).setWinnerTennisJeu(player1);
+        assertEquals(tennisMatch.gamesInCurrentSetForPlayer(player1) ,2);
     }
 }
