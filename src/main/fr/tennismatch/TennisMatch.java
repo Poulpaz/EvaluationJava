@@ -11,7 +11,6 @@ public class TennisMatch {
     private Player player2;
     private Boolean tieBreakInLastSet;
     private List<TennisSet> tennisSetList;
-    private int currentSetNumber;
 
     public TennisMatch(MatchType matchType, Player player1, Player player2, Boolean tieBreakInLastSet) {
         this.matchType = matchType;
@@ -19,8 +18,7 @@ public class TennisMatch {
         this.player2 = player2;
         this.tieBreakInLastSet = tieBreakInLastSet;
         this.tennisSetList = new ArrayList<>();
-        this.currentSetNumber = 1;
-        tennisSetList.add(new TennisSet(currentSetNumber));
+        tennisSetList.add(new TennisSet(1));
     }
 
     public void updateWithPointWonBy(Player player) {
@@ -38,7 +36,7 @@ public class TennisMatch {
             }
         }
         if(player.getScore() > 4) {
-            tennisSetList.get(currentSetNumber - 1).setWinnerTennisJeu(player);
+            tennisSetList.get(getTennisSetList().size() - 1).setWinnerTennisJeu(player);
             player1.setScore(0);
             player2.setScore(0);
         } else { return; }
@@ -61,15 +59,14 @@ public class TennisMatch {
         }
         return pointsForPlayer;
     }
-/*
+
     public int currentSetNumber() {
-
+        return tennisSetList.get(getTennisSetList().size() - 1).getSetNumber();
     }
-*/
-    public int gamesInCurrentSetForPlayer(Player player) {
-        ListIterator<TennisJeu> it = tennisSetList.get(currentSetNumber - 1).getTennisJeuList().listIterator();
-        int count = 0;
 
+    public int gamesInCurrentSetForPlayer(Player player) {
+        ListIterator<TennisJeu> it = tennisSetList.get(getTennisSetList().size() - 1).getTennisJeuList().listIterator();
+        int count = 0;
         while(it.hasNext()) {
             if(it.next().getWinnerTennisJeu() == player) {
                 count++;
@@ -77,11 +74,23 @@ public class TennisMatch {
         }
         return count;
     }
-/*
+
     public int gamesInSetForPlayer(int setNumber, Player player) {
-
+        int count = 0;
+        try {
+            ListIterator<TennisJeu> it = tennisSetList.get(setNumber - 1).getTennisJeuList().listIterator();
+            while(it.hasNext()) {
+                if(it.next().getWinnerTennisJeu() == player) {
+                    count++;
+                }
+            }
+            return count;
+        } catch(Exception e) {
+            e.printStackTrace();
+            return count;
+        }
     }
-
+    /*
     public boolean isFinished() {
 
     }
@@ -89,10 +98,6 @@ public class TennisMatch {
 
     public List<TennisSet> getTennisSetList() {
         return tennisSetList;
-    }
-
-    public int getCurrentSetNumber() {
-        return currentSetNumber;
     }
 
     public Player getPlayer1() {

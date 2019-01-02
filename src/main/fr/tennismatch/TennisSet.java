@@ -5,12 +5,12 @@ import java.util.List;
 
 public class TennisSet {
 
-    private int numberOfSet;
+    private int setNumber;
     private Player winnerTennisSet;
     private List<TennisJeu> tennisJeuList;
 
     public TennisSet(int numberOfSet) {
-        this.numberOfSet = numberOfSet;
+        this.setNumber = numberOfSet;
         this.winnerTennisSet = null;
         this.tennisJeuList = new ArrayList<>();
     }
@@ -27,8 +27,8 @@ public class TennisSet {
         this.winnerTennisSet = winnerTennisSet;
     }
 
-    public int getNumberOfSet() {
-        return numberOfSet;
+    public int getSetNumber() {
+        return setNumber;
     }
 
     public List<TennisJeu> getTennisJeuList() {
