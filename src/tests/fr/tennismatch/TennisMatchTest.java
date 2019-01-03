@@ -81,4 +81,47 @@ public class TennisMatchTest {
         tennisMatch.updateWithPointWonBy(player1);
         assertEquals(tennisMatch.currentSetNumber(), 2);
     }
+
+    @Test
+    public void isFinishedWithBestOfThree(){
+        Player player1 = new Player("Tristan");
+        Player player2 = new Player("Jerome");
+        TennisMatch tennisMatch = new TennisMatch(MatchType.BEST_OF_THREE, player1, player2, true);
+        tennisMatch.getTennisSetList().get(tennisMatch.getTennisSetList().size() - 1).setWinnerTennisSet(player1);
+        tennisMatch.getTennisSetList().add(new TennisSet(tennisMatch.getTennisSetList().size() + 1));
+        tennisMatch.getTennisSetList().get(tennisMatch.getTennisSetList().size() - 1).setWinnerTennisJeu(player1);
+        tennisMatch.getTennisSetList().get(tennisMatch.getTennisSetList().size() - 1).setWinnerTennisJeu(player1);
+        tennisMatch.getTennisSetList().get(tennisMatch.getTennisSetList().size() - 1).setWinnerTennisJeu(player1);
+        tennisMatch.getTennisSetList().get(tennisMatch.getTennisSetList().size() - 1).setWinnerTennisJeu(player1);
+        tennisMatch.getTennisSetList().get(tennisMatch.getTennisSetList().size() - 1).setWinnerTennisJeu(player1);
+        tennisMatch.getPlayer1().setScore(4);
+        tennisMatch.updateWithPointWonBy(player1);
+        assertEquals(tennisMatch.isFinished(), true);
+    }
+
+    @Test
+    public void isFinishedWithBestOfFive(){
+        Player player1 = new Player("Tristan");
+        Player player2 = new Player("Jerome");
+        TennisMatch tennisMatch = new TennisMatch(MatchType.BEST_OF_FIVE, player1, player2, true);
+        tennisMatch.getTennisSetList().get(tennisMatch.getTennisSetList().size() - 1).setWinnerTennisSet(player1);
+        tennisMatch.getTennisSetList().add(new TennisSet(tennisMatch.getTennisSetList().size() + 1));
+        tennisMatch.getTennisSetList().get(tennisMatch.getTennisSetList().size() - 1).setWinnerTennisSet(player1);
+        tennisMatch.getTennisSetList().add(new TennisSet(tennisMatch.getTennisSetList().size() + 1));
+        tennisMatch.getTennisSetList().get(tennisMatch.getTennisSetList().size() - 1).setWinnerTennisJeu(player1);
+        tennisMatch.getTennisSetList().get(tennisMatch.getTennisSetList().size() - 1).setWinnerTennisJeu(player1);
+        tennisMatch.getTennisSetList().get(tennisMatch.getTennisSetList().size() - 1).setWinnerTennisJeu(player1);
+        tennisMatch.getTennisSetList().get(tennisMatch.getTennisSetList().size() - 1).setWinnerTennisJeu(player1);
+        tennisMatch.getTennisSetList().get(tennisMatch.getTennisSetList().size() - 1).setWinnerTennisJeu(player1);
+        tennisMatch.getPlayer1().setScore(4);
+        tennisMatch.updateWithPointWonBy(player1);
+        assertEquals(tennisMatch.isFinished(), true);
+    }
+
+    @Test
+    public void simulateTennisMatchFromStartToEnd(){
+        Player player1 = new Player("Tristan");
+        Player player2 = new Player("Jerome");
+        TennisMatch tennisMatch = new TennisMatch(MatchType.BEST_OF_FIVE, player1, player2, true);
+    }
 }

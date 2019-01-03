@@ -6,6 +6,7 @@ import java.util.ListIterator;
 
 public class TennisMatch {
 
+    private final ManagerTennisMatch managerTennisMatch = new ManagerTennisMatch(this);
     private MatchType matchType;
     private Player player1;
     private Player player2;
@@ -21,11 +22,14 @@ public class TennisMatch {
         tennisSetList.add(new TennisSet(1));
     }
 
+    /* -- Main methods for TennisMatch --*/
+    // Start Region
+
     public void updateWithPointWonBy(Player player) {
         if(player == player1) {
-            checkScoreAndUpdateGame(player, player2);
+            managerTennisMatch.checkScoreAndUpdateGame(player, player2);
         } else {
-            checkScoreAndUpdateGame(player, player1);
+            managerTennisMatch.checkScoreAndUpdateGame(player, player1);
         }
     }
 
@@ -54,48 +58,26 @@ public class TennisMatch {
     public int gamesInCurrentSetForPlayer(Player player) {
         ListIterator<TennisJeu> it = tennisSetList.get(getTennisSetList().size() - 1).getTennisJeuList().listIterator();
         int count = 0;
-        return getNumberTennisJeuWon(player, it, count);
+        return managerTennisMatch.getNumberTennisJeuWon(player, it, count);
     }
 
     public int gamesInSetForPlayer(int setNumber, Player player) {
         int count = 0;
         try {
             ListIterator<TennisJeu> it = tennisSetList.get(setNumber - 1).getTennisJeuList().listIterator();
-            return getNumberTennisJeuWon(player, it, count);
+            return managerTennisMatch.getNumberTennisJeuWon(player, it, count);
         } catch(Exception e) {
             e.printStackTrace();
             return count;
         }
     }
-    /*
+
     public boolean isFinished() {
-
-    }
-    */
-    public int getNumberTennisJeuWon(Player player, ListIterator<TennisJeu> it, int count) {
-        while (it.hasNext()) {
-            if (it.next().getWinnerTennisJeu() == player) {
-                count++;
-            }
-        }
-        return count;
-    }
-
-    public void checkScoreAndUpdateGame(Player player1, Player player2) {
-        if(pointsForPlayer(player2) == "A") {
-            player2.setScore(player2.getScore() - 1);
-        } else {
-            player1.setScore(player1.getScore() + 1);
-            if(player1.getScore() > 4) {
-                tennisSetList.get(getTennisSetList().size() - 1).setWinnerTennisJeu(player1);
-                this.player1.setScore(0);
-                player2.setScore(0);
-                if(gamesInCurrentSetForPlayer(player1) == 6) {
-                    tennisSetList.get(tennisSetList.size() - 1).setWinnerTennisSet(player1);
-                    tennisSetList.add(new TennisSet(tennisSetList.size() + 1));
-                } else { return; }
-            } else { return; }
-        }
+        if(matchType == MatchType.BEST_OF_THREE && managerTennisMatch.getSetWonByPlayer(player1) == MatchType.BEST_OF_THREE.numberOfSetsToWin() || managerTennisMatch.getSetWonByPlayer(player2) == MatchType.BEST_OF_THREE.numberOfSetsToWin()) {
+            return true;
+        } else if(matchType == MatchType.BEST_OF_FIVE && managerTennisMatch.getSetWonByPlayer(player1) == MatchType.BEST_OF_FIVE.numberOfSetsToWin() || managerTennisMatch.getSetWonByPlayer(player2) == MatchType.BEST_OF_FIVE.numberOfSetsToWin()) {
+            return true;
+        } else { return false; }
     }
 
     public List<TennisSet> getTennisSetList() {
@@ -109,4 +91,36 @@ public class TennisMatch {
     public Player getPlayer2() {
         return player2;
     }
+
+    public MatchType getMatchType() {
+        return matchType;
+    }
+
+    public Boolean getTieBreakInLastSet() {
+        return tieBreakInLastSet;
+    }
+
+    //End Region
+
+    /* -- Manager's methods for TennisMatch --*/
+    // Start Region
+
+    public int getSetWonByPlayer(Player player) {
+        return managerTennisMatch.getSetWonByPlayer(player);
+    }
+
+    public int getNumberTennisJeuWon(Player player, ListIterator<TennisJeu> it, int count) {
+        return managerTennisMatch.getNumberTennisJeuWon(player, it, count);
+    }
+
+
+    public void checkScoreAndUpdateGame(Player player1, Player player2) {
+        managerTennisMatch.checkScoreAndUpdateGame(player1, player2);
+    }
+
+    public void actionForCurrentSet(Player player1, Player player2) {
+        managerTennisMatch.actionForCurrentSet(player1, player2);
+    }
+
+    //End Region
 }
