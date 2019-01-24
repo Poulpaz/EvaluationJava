@@ -26,29 +26,51 @@ public class TennisMatch {
     // Start Region
 
     public void updateWithPointWonBy(Player player) {
-        if(player == player1) {
-            managerTennisMatch.checkScoreAndUpdateGame(player, player2);
+        if(managerTennisMatch.statusTennisMatch == "ClassicalGame") {
+            if (player == player1) {
+                managerTennisMatch.checkScoreAndUpdateGame(player, player2);
+            } else {
+                managerTennisMatch.checkScoreAndUpdateGame(player, player1);
+            }
+        } else if(managerTennisMatch.statusTennisMatch == "TieBreakInProgress") {
+            player.setScore(player.getScore() + 1);
+            if((player1.getScore() >= 7 && player1.getScore() - player2.getScore() >= 2) || (player2.getScore() >= 7 && player2.getScore() - player1.getScore() >= 2)) {
+                tennisSetList.get(tennisSetList.size() - 1).getBaseGameList().add(new TieBreakGame(player));
+                player1.setScore(0);
+                player2.setScore(0);
+            }
         } else {
-            managerTennisMatch.checkScoreAndUpdateGame(player, player1);
+            return;
         }
     }
 
     public String pointsForPlayer(Player player) {
         String pointsForPlayer;
-        switch(player.getScore()) {
-            case 0: pointsForPlayer = "0";
-            break;
-            case 1: pointsForPlayer = "15";
-            break;
-            case 2: pointsForPlayer = "30";
-            break;
-            case 3: pointsForPlayer = "40";
-            break;
-            case 4: pointsForPlayer = "A";
-            break;
-            default: pointsForPlayer = null;
+        if(managerTennisMatch.statusTennisMatch == "ClassicalGame") {
+            switch (player.getScore()) {
+                case 0:
+                    pointsForPlayer = "0";
+                    break;
+                case 1:
+                    pointsForPlayer = "15";
+                    break;
+                case 2:
+                    pointsForPlayer = "30";
+                    break;
+                case 3:
+                    pointsForPlayer = "40";
+                    break;
+                case 4:
+                    pointsForPlayer = "A";
+                    break;
+                default:
+                    pointsForPlayer = null;
+            }
+            return pointsForPlayer;
+        } else if(managerTennisMatch.statusTennisMatch == "TieBreakInProgress") {
+            return String.valueOf(player.getScore());
         }
-        return pointsForPlayer;
+        return null;
     }
 
     public int currentSetNumber() {
@@ -56,7 +78,7 @@ public class TennisMatch {
     }
 
     public int gamesInCurrentSetForPlayer(Player player) {
-        ListIterator<TennisJeu> it = tennisSetList.get(getTennisSetList().size() - 1).getTennisJeuList().listIterator();
+        ListIterator<BaseGame> it = tennisSetList.get(getTennisSetList().size() - 1).getBaseGameList().listIterator();
         int count = 0;
         return managerTennisMatch.getNumberTennisJeuWon(player, it, count);
     }
@@ -64,20 +86,22 @@ public class TennisMatch {
     public int gamesInSetForPlayer(int setNumber, Player player) {
         int count = 0;
         try {
-            ListIterator<TennisJeu> it = tennisSetList.get(setNumber - 1).getTennisJeuList().listIterator();
+            ListIterator<BaseGame> it = tennisSetList.get(setNumber - 1).getBaseGameList().listIterator();
             return managerTennisMatch.getNumberTennisJeuWon(player, it, count);
-        } catch(Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
             return count;
         }
     }
 
     public boolean isFinished() {
-        if(matchType == MatchType.BEST_OF_THREE && managerTennisMatch.getSetWonByPlayer(player1) == MatchType.BEST_OF_THREE.numberOfSetsToWin() || managerTennisMatch.getSetWonByPlayer(player2) == MatchType.BEST_OF_THREE.numberOfSetsToWin()) {
+        if (matchType == MatchType.BEST_OF_THREE && managerTennisMatch.getSetWonByPlayer(player1) == MatchType.BEST_OF_THREE.numberOfSetsToWin() || managerTennisMatch.getSetWonByPlayer(player2) == MatchType.BEST_OF_THREE.numberOfSetsToWin()) {
             return true;
-        } else if(matchType == MatchType.BEST_OF_FIVE && managerTennisMatch.getSetWonByPlayer(player1) == MatchType.BEST_OF_FIVE.numberOfSetsToWin() || managerTennisMatch.getSetWonByPlayer(player2) == MatchType.BEST_OF_FIVE.numberOfSetsToWin()) {
+        } else if (matchType == MatchType.BEST_OF_FIVE && managerTennisMatch.getSetWonByPlayer(player1) == MatchType.BEST_OF_FIVE.numberOfSetsToWin() || managerTennisMatch.getSetWonByPlayer(player2) == MatchType.BEST_OF_FIVE.numberOfSetsToWin()) {
             return true;
-        } else { return false; }
+        } else {
+            return false;
+        }
     }
 
     public List<TennisSet> getTennisSetList() {
@@ -98,28 +122,6 @@ public class TennisMatch {
 
     public Boolean getTieBreakInLastSet() {
         return tieBreakInLastSet;
-    }
-
-    //End Region
-
-    /* -- Manager's methods for TennisMatch --*/
-    // Start Region
-
-    public int getSetWonByPlayer(Player player) {
-        return managerTennisMatch.getSetWonByPlayer(player);
-    }
-
-    public int getNumberTennisJeuWon(Player player, ListIterator<TennisJeu> it, int count) {
-        return managerTennisMatch.getNumberTennisJeuWon(player, it, count);
-    }
-
-
-    public void checkScoreAndUpdateGame(Player player1, Player player2) {
-        managerTennisMatch.checkScoreAndUpdateGame(player1, player2);
-    }
-
-    public void actionForCurrentSet(Player player1, Player player2) {
-        managerTennisMatch.actionForCurrentSet(player1, player2);
     }
 
     //End Region

@@ -3,7 +3,9 @@ package fr.tennismatch;
 import java.util.ListIterator;
 
 public class ManagerTennisMatch {
+
     private final TennisMatch tennisMatch;
+    public String statusTennisMatch = "ClassicalGame";
 
     public ManagerTennisMatch(TennisMatch tennisMatch) {
         this.tennisMatch = tennisMatch;
@@ -20,9 +22,9 @@ public class ManagerTennisMatch {
         return count;
     }
 
-    public int getNumberTennisJeuWon(Player player, ListIterator<TennisJeu> it, int count) {
+    public int getNumberTennisJeuWon(Player player, ListIterator<BaseGame> it, int count) {
         while (it.hasNext()) {
-            if (it.next().getWinnerTennisJeu() == player) {
+            if (it.next().getWinnerBaseGame() == player) {
                 count++;
             }
         }
@@ -38,23 +40,21 @@ public class ManagerTennisMatch {
                 tennisMatch.getTennisSetList().get(tennisMatch.getTennisSetList().size() - 1).setWinnerTennisJeu(player1);
                 tennisMatch.getPlayer1().setScore(0);
                 tennisMatch.getPlayer2().setScore(0);
-                actionForCurrentSet(player1, player2);
+                statusTennisMatch = actionForCurrentSet(player1, player2);
             } else {
                 return;
             }
         }
     }
 
-    public void actionForCurrentSet(Player player1, Player player2) {
+    public String actionForCurrentSet(Player player1, Player player2) {
         if ((tennisMatch.gamesInCurrentSetForPlayer(player1) == 6 && tennisMatch.gamesInCurrentSetForPlayer(player2) <= 4) || (tennisMatch.gamesInCurrentSetForPlayer(player1) == 7 && tennisMatch.gamesInCurrentSetForPlayer(player2) <= 5)) {
             tennisMatch.getTennisSetList().get(tennisMatch.getTennisSetList().size() - 1).setWinnerTennisSet(player1);
             tennisMatch.getTennisSetList().add(new TennisSet(tennisMatch.getTennisSetList().size() + 1));
         } else if (tennisMatch.gamesInCurrentSetForPlayer(player1) == 6 && tennisMatch.gamesInCurrentSetForPlayer(player2) == 6 && tennisMatch.getTieBreakInLastSet()) {
             //Manage tieBreak
-        } else if (tennisMatch.gamesInCurrentSetForPlayer(player1) == 6 && tennisMatch.gamesInCurrentSetForPlayer(player2) == 6 && !tennisMatch.getTieBreakInLastSet() && tennisMatch.getMatchType().numberOfSetsToWin() == tennisMatch.getTennisSetList().size()) {
-            //Manage two games played by players to win
-        } else {
-            return;
+            return "TieBreakInProgress";
         }
+        return "ClassicalGame";
     }
 }

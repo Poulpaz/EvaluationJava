@@ -7,16 +7,16 @@ public class TennisSet {
 
     private int setNumber;
     private Player winnerTennisSet;
-    private List<TennisJeu> tennisJeuList;
+    private List<BaseGame> baseGameList;
 
     public TennisSet(int numberOfSet) {
         this.setNumber = numberOfSet;
         this.winnerTennisSet = null;
-        this.tennisJeuList = new ArrayList<>();
+        this.baseGameList = new ArrayList<>();
     }
 
     public void setWinnerTennisJeu(Player winnerTennisJeu) {
-        tennisJeuList.add(new TennisJeu(winnerTennisJeu));
+        baseGameList.add(new TennisGame(winnerTennisJeu));
     }
 
     public Player getWinnerTennisSet() {
@@ -31,7 +31,7 @@ public class TennisSet {
         return setNumber;
     }
 
-    public List<TennisJeu> getTennisJeuList() {
-        return tennisJeuList;
+    public List<BaseGame> getBaseGameList() {
+        return baseGameList;
     }
 }
